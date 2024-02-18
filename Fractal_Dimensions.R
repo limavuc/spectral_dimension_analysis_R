@@ -1,9 +1,11 @@
 ```{r}
-FD.calculate <- function(X, max_bin){
+FD.calculate <- function(X, max_bin = 7, export = FALSE, file_type = ".txt"){
 
 # This calculates the fractal dimensions of data already translated into Z-score population standard deviations of time series data n-point means. Please use another function I have created if this is not yet the case.
 # X = the population standard deviation data frame, can be any number of rows.
-# max_bin = the maximum bin number you want to take the linear model to. 7 is usually standard.
+# max_bin = the maximum bin number you want to take the linear model to. 7 is usually standard, so it defaults to 7.
+# export = whether you want your results exported. This defaults to FALSE.
+# file_type = what kind of file you want your results exported to. .txt is the default, but .csv and .xlsx are supported as well.
 
 # initializing an empty vector to store FDs
 FD_values <- numeric(nrow(X))
@@ -44,6 +46,20 @@ FD_values[i] <- FD
 
 # binds all FDs into one data frame and returns the result
 result <- data.frame(FD = FD_values)
+
+# exporting options
+if(export){
+  if(file_type == "txt"){
+    write.table(result, "FD_results.txt")
+  } else if(file_type == "csv"){
+    write.csv(result, "FD_results.csv")
+  } else if(file_type == "xlsx"){
+    write.xlsx(result, "FD_results.xlsx")
+  } else{
+    stop("Invalid file type specified! Use .txt, .csv, or .xlsx.")
+  }
+}
+  
 return(result)
 }
 ```
